@@ -22,46 +22,7 @@ public final class R {
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int exploded=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int land=0x7f020002;
-        public static final int shot=0x7f020003;
-        public static final int tank0=0x7f020004;
-        public static final int tank1=0x7f020005;
-        public static final int tank10=0x7f020006;
-        public static final int tank11=0x7f020007;
-        public static final int tank12=0x7f020008;
-        public static final int tank13=0x7f020009;
-        public static final int tank14=0x7f02000a;
-        public static final int tank15=0x7f02000b;
-        public static final int tank16=0x7f02000c;
-        public static final int tank17=0x7f02000d;
-        public static final int tank18=0x7f02000e;
-        public static final int tank19=0x7f02000f;
-        public static final int tank2=0x7f020010;
-        public static final int tank20=0x7f020011;
-        public static final int tank21=0x7f020012;
-        public static final int tank22=0x7f020013;
-        public static final int tank23=0x7f020014;
-        public static final int tank24=0x7f020015;
-        public static final int tank25=0x7f020016;
-        public static final int tank26=0x7f020017;
-        public static final int tank27=0x7f020018;
-        public static final int tank28=0x7f020019;
-        public static final int tank29=0x7f02001a;
-        public static final int tank3=0x7f02001b;
-        public static final int tank30=0x7f02001c;
-        public static final int tank31=0x7f02001d;
-        public static final int tank32=0x7f02001e;
-        public static final int tank33=0x7f02001f;
-        public static final int tank34=0x7f020020;
-        public static final int tank35=0x7f020021;
-        public static final int tank4=0x7f020022;
-        public static final int tank5=0x7f020023;
-        public static final int tank6=0x7f020024;
-        public static final int tank7=0x7f020025;
-        public static final int tank8=0x7f020026;
-        public static final int tank9=0x7f020027;
+        public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
         public static final int action_settings=0x7f090002;
@@ -76,9 +37,49 @@ public final class R {
         public static final int main=0x7f080000;
     }
     public static final class raw {
-        public static final int explosion_loud=0x7f040000;
-        public static final int got_explosion=0x7f040001;
-        public static final int lasershot=0x7f040002;
+        public static final int exploded=0x7f040000;
+        public static final int explosion_loud=0x7f040001;
+        public static final int got_explosion=0x7f040002;
+        public static final int land=0x7f040003;
+        public static final int land2=0x7f040004;
+        public static final int lasershot=0x7f040005;
+        public static final int shot=0x7f040006;
+        public static final int tank0=0x7f040007;
+        public static final int tank1=0x7f040008;
+        public static final int tank10=0x7f040009;
+        public static final int tank11=0x7f04000a;
+        public static final int tank12=0x7f04000b;
+        public static final int tank13=0x7f04000c;
+        public static final int tank14=0x7f04000d;
+        public static final int tank15=0x7f04000e;
+        public static final int tank16=0x7f04000f;
+        public static final int tank17=0x7f040010;
+        public static final int tank18=0x7f040011;
+        public static final int tank19=0x7f040012;
+        public static final int tank2=0x7f040013;
+        public static final int tank20=0x7f040014;
+        public static final int tank21=0x7f040015;
+        public static final int tank22=0x7f040016;
+        public static final int tank23=0x7f040017;
+        public static final int tank24=0x7f040018;
+        public static final int tank25=0x7f040019;
+        public static final int tank26=0x7f04001a;
+        public static final int tank27=0x7f04001b;
+        public static final int tank28=0x7f04001c;
+        public static final int tank29=0x7f04001d;
+        public static final int tank3=0x7f04001e;
+        public static final int tank30=0x7f04001f;
+        public static final int tank31=0x7f040020;
+        public static final int tank32=0x7f040021;
+        public static final int tank33=0x7f040022;
+        public static final int tank34=0x7f040023;
+        public static final int tank35=0x7f040024;
+        public static final int tank4=0x7f040025;
+        public static final int tank5=0x7f040026;
+        public static final int tank6=0x7f040027;
+        public static final int tank7=0x7f040028;
+        public static final int tank8=0x7f040029;
+        public static final int tank9=0x7f04002a;
     }
     public static final class string {
         public static final int action_settings=0x7f060002;

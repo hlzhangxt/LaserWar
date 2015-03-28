@@ -18,8 +18,11 @@ public class MainActivity extends Activity {
      /*   requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
+        
         */
+        setContentView(R.layout.activity_main); 
+        
+       
         View decorView = getWindow().getDecorView();
      // Hide the status bar.
      int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE 
@@ -29,6 +32,9 @@ public class MainActivity extends Activity {
      // status bar is hidden, so hide that too if necessary.
      ActionBar actionBar = getActionBar();
      actionBar.hide();
+     
+     
+     
     }
 
 
