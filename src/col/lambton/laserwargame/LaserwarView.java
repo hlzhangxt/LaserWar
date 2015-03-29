@@ -804,5 +804,7 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 	         } // end Runnable
 	      ); // end call to runOnUiThread
 	   } // end method showGameOverDialog
+	
+	
 
 }

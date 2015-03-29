@@ -193,4 +193,18 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		LaserwarView view = (LaserwarView)findViewById(R.id.laserwarView);
+		view.stopGame();
+		view.releaseResources();
+		
+		
+		super.onPause();
+		finish();
+	}
+	
+	
 }
