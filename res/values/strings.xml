@@ -4,5 +4,8 @@
     <string name="app_name">LaserWar</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="newgame">New Game</string>
+    <string name="existgame">Join Existing Game</string>
+    <string name="gametitle">Larser-War Game</string>
 
 </resources>

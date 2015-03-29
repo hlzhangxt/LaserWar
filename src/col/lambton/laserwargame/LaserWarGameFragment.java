@@ -9,12 +9,8 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 
 public class LaserWarGameFragment extends Fragment {
-	
+
 	private LaserwarView gameView;
-	
-	
-	     
-	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -22,13 +18,11 @@ public class LaserWarGameFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_game, container, false);
-		
+
 		gameView = (LaserwarView) view.findViewById(R.id.laserwarView);
-		
+
 		return view;
-		
-		
-		
+
 	}
 
 	@Override

@@ -13,6 +13,6 @@ public class fireInfo {
 
 	int fule = 0;
 
-	int time = 5;
+	int time = 9;
 
 }

@@ -1,18 +1,17 @@
 package col.lambton.laserwargame;
 
-
 import java.io.File;
 import java.util.*;
 
-
-
-
-
 import java.io.*;
+
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class AGameSession {
 
-	private String gameid;
+	private String gameid = "-1";
 	public static int ID;
 
 	public static String[] namelist = new String[0];
@@ -31,9 +30,44 @@ public class AGameSession {
 	private int y2;
 
 	private int angle2 = 180;
-	
+
 	private int speed1 = 3;
 	private int speed2 = 3;
+	
+	
+	public static Activity activity;
+	
+	private Bitmap[] Bmspaceships = new Bitmap[36];
+
+	//private Bitmap BmShot;
+
+	//private Bitmap BmExploded;
+	
+	
+	public Bitmap imgTank = null;// this.getToolkit().getImage("./resources/tank0.jpg");
+	public Bitmap imgTank2 = null;
+	public static Bitmap imgExp = null;
+	
+	
+	
+	
+	public synchronized Bitmap getImgTank() {
+		return imgTank;
+	}
+
+	public synchronized void setImgTank(Bitmap imgTank) {
+		this.imgTank = imgTank;
+	}
+
+	public synchronized Bitmap getImgTank2() {
+		return imgTank2;
+	}
+
+	public synchronized void setImgTank2(Bitmap imgTank2) {
+		this.imgTank2 = imgTank2;
+	}
+	
+	
 
 	public synchronized int getSpeed2() {
 		return speed2;
@@ -55,7 +89,7 @@ public class AGameSession {
 
 	private ArrayList<fireInfo> fires = new ArrayList();
 
-	//public static AudioStream laserGun = null;
+	// public static AudioStream laserGun = null;
 
 	public synchronized void addNewFireInfo(fireInfo fi) {
 		fires.add(fi);
@@ -118,27 +152,22 @@ public class AGameSession {
 	final static int MaxDiv = 36;
 
 	/*
-	public synchronized Image getImgTank() {
-		return imgTank;
-	}
-
-	public synchronized void setImgTank(Image imgTank) {
-		this.imgTank = imgTank;
-	}
-
-	public synchronized Image getImgTank2() {
-		return imgTank2;
-	}
-
-	public synchronized void setImgTank2(Image imgTank2) {
-		this.imgTank2 = imgTank2;
-	}
-   */
-	//public BufferedImage[] tanks = new BufferedImage[MaxDiv];
-	//public Image imgTank = null;// this.getToolkit().getImage("./resources/tank0.jpg");
-	//public Image imgTank2 = null;
-	//public static Image imgExp = null;// ImageIO.read(new
-										// File("./resources/exploded.png"));
+	 * public synchronized Image getImgTank() { return imgTank; }
+	 * 
+	 * public synchronized void setImgTank(Image imgTank) { this.imgTank =
+	 * imgTank; }
+	 * 
+	 * public synchronized Image getImgTank2() { return imgTank2; }
+	 * 
+	 * public synchronized void setImgTank2(Image imgTank2) { this.imgTank2 =
+	 * imgTank2; }
+	 */
+	// public BufferedImage[] tanks = new BufferedImage[MaxDiv];
+	// public Image imgTank = null;//
+	// this.getToolkit().getImage("./resources/tank0.jpg");
+	// public Image imgTank2 = null;
+	// public static Image imgExp = null;// ImageIO.read(new
+	// File("./resources/exploded.png"));
 
 	public synchronized int getX2() {
 		return x2;
@@ -228,21 +257,27 @@ public class AGameSession {
 	}
 
 	public AGameSession() {
+		
+		for (int i = R.raw.tank00; i <= R.raw.tank35; i++)
+			Bmspaceships[i - R.raw.tank00] = BitmapFactory.decodeResource(
+					activity.getResources(), i);
 
-	/*	try {
-			for (int i = 0; i < MaxDiv; i++) {
+	//	BmShot = BitmapFactory.decodeResource(activity.getResources(),
+	//			R.raw.shot);
+		imgExp = BitmapFactory.decodeResource(activity.getResources(),
+				R.raw.exploded);
 
-				tanks[i] = ImageIO.read(new File("./resources/tank" + i
-						+ ".png"));
-
-			}
-
-			imgExp = ImageIO.read(new File("./resources/exploded.png"));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-   */
+		/*
+		 * try { for (int i = 0; i < MaxDiv; i++) {
+		 * 
+		 * tanks[i] = ImageIO.read(new File("./resources/tank" + i + ".png"));
+		 * 
+		 * }
+		 * 
+		 * imgExp = ImageIO.read(new File("./resources/exploded.png"));
+		 * 
+		 * } catch (Exception e) { e.printStackTrace(); }
+		 */
 	}
 
 	public synchronized void setGameid(String gameid) {
@@ -255,7 +290,7 @@ public class AGameSession {
 		int i = angle % 360 / 10;
 		if (i < 0)
 			i += 36;
-		//imgTank = tanks[i];
+		 imgTank = Bmspaceships[i];
 
 	}
 
@@ -265,7 +300,7 @@ public class AGameSession {
 		int i = angle % 360 / 10;
 		if (i < 0)
 			i += 36;
-		//imgTank2 = tanks[i];
+		 imgTank2 = Bmspaceships[i];
 
 	}
 

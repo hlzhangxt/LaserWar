@@ -1,6 +1,5 @@
 package col.lambton.laserwargame;
 
-
 import java.nio.charset.Charset;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -11,20 +10,18 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 
 import android.view.SurfaceHolder;
 
+public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelInboundHandler<String>
+	// implements Runnable {
 
-
-public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInboundHandler<String>
-		//implements Runnable {
-
-	private SurfaceHolder sh;
+	private LaserwarView view;
 	static AGameSession game = new AGameSession();
 
-	public gameClientHandler(SurfaceHolder sh) {
-		
-		this.sh = sh;
+	public gameClientHandler(LaserwarView v) {
+
+		this.view = v;
 
 	}
-	
+
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
 		ChannelBuffer buf = (ChannelBuffer) e.getMessage();
 		String msg = buf.toString(Charset.defaultCharset());
@@ -50,23 +47,23 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 				String[] xys = msgs[3].split(",");
 				game.setC1(new Constraint(xys[0], xys[1], xys[2], xys[3]));
 				game.setC2(new Constraint(xys[4], xys[5], xys[6], xys[7]));
-   /*
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						gw.initialGameForSec();
-					}
-				});
-     */
+				
+				view.initialGameForSec();
+				/*
+				 * EventQueue.invokeLater(new Runnable() { public void run() {
+				 * gw.initialGameForSec(); } });
+				 */
 			}
 			if (game.ID == 1) {
 
 				game.getTankImageForSec();
 
-			//	EventQueue.invokeLater(this);
+				// EventQueue.invokeLater(this);
 				// gw.repaint();
+				
 
 			}
-
+			//view.drawGameElements();
 			break;
 
 		case "NEW":
@@ -82,13 +79,17 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 			String[] xys = msgs[3].split(",");
 			game.setC1(new Constraint(xys[0], xys[1], xys[2], xys[3]));
 			game.setC2(new Constraint(xys[4], xys[5], xys[6], xys[7]));
+			
+			
+			view.initialGame();
+		//	view.drawGameElements();
 
-		/*	EventQueue.invokeLater(new Runnable() {
-
-				public void run() {
-					//gw.initialGame();
-				}
-			});*/
+			/*
+			 * EventQueue.invokeLater(new Runnable() {
+			 * 
+			 * public void run() { //gw.initialGame(); } });
+			 */
+			
 
 			break;
 
@@ -110,13 +111,12 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 
 			}
 
-			//EventQueue.invokeLater(this);
+			// EventQueue.invokeLater(this);
 			/*
-										 * EventQueue.invokeLater(new Runnable()
-										 * { public void run() { gw.repaint(); }
-										 * });
-										 */
-
+			 * EventQueue.invokeLater(new Runnable() { public void run() {
+			 * gw.repaint(); } });
+			 */
+		//	view.drawGameElements();
 			break;
 
 		case "ANGLE":
@@ -127,7 +127,7 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 			if (part == 1) {
 				game.setAngle(newAngle);
 				game.getTankImageForMain();
-			//	EventQueue.invokeLater(this);
+				// EventQueue.invokeLater(this);
 				/*
 				 * EventQueue.invokeLater(new Runnable() { public void run() {
 				 * 
@@ -138,16 +138,16 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 			} else {
 				game.setAngle2(newAngle);
 				game.getTankImageForSec();
-			//	EventQueue.invokeLater(this);
+				// EventQueue.invokeLater(this);
 				/*
-											 * new Runnable() { public void
-											 * run() {
-											 * 
-											 * 
-											 * gw.repaint(); } });
-											 */
+				 * new Runnable() { public void run() {
+				 * 
+				 * 
+				 * gw.repaint(); } });
+				 */
 
 			}
+			//view.drawGameElements();
 
 			break;
 
@@ -165,7 +165,7 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 
 			}
 			AGameSession.setGotGames(true);
-
+		//	view.drawGameElements();
 			break;
 
 		case "FIRE":
@@ -181,14 +181,18 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 			fi.targeted = Boolean.parseBoolean(msgs[2]);
 
 			game.addNewFireInfo(fi);
-   /*
-			new PlaySoundThread("./resources/lasershot.wav").start();
-
-			if (fi.targeted)
-				new PlaySoundThread("./resources/GotExplosion.wav").start();
-
-			EventQueue.invokeLater(this);
-   */
+			/*
+			 * new PlaySoundThread("./resources/lasershot.wav").start();
+			 * 
+			 * if (fi.targeted) new
+			 * PlaySoundThread("./resources/GotExplosion.wav").start();
+			 * 
+			 * EventQueue.invokeLater(this);
+			 */
+		//	view.drawGameElements();
+			
+			view.soundPool.play(view.soundMap.get(view.LASERSHOT), 1, 1, 1, 0, 1f);
+			if (fi.targeted) view.soundPool.play(view.soundMap.get(view.GOTEXPLOSION), 1, 1, 1, 0, 1f);
 			break;
 
 		case "SCORE":
@@ -205,39 +209,39 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 				game.setFule2(score);
 
 			}
-          /*
-			EventQueue.invokeLater(this);
-
+		//	view.drawGameElements();
+			
+			 
+			 
 			if (score <= 0) {
-				 
-
-				if (part == 1) {
-					game.setImgTank(game.imgExp);
-
-				}
-
-				if (part == 2) {
-					game.setImgTank2(game.imgExp);
-
-				}
-
-				if (game.ID == part)
-					game.setEndMsg("You lose!");
-
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-
-						gw.showEndMsg();
-					}
-
-				});
-
-			}*/
+				
+				view.soundPool.play(view.soundMap.get(view.EXPLODEDLOUD), 1, 1, 1, 0, 1f);	
+			 
+			 
+			if (part == 1) { game.setImgTank(game.imgExp);
+			
+			}
+			 
+			 if (part == 2) { game.setImgTank2(game.imgExp);
+			  
+			}
+			 
+			  if (game.ID == part) game.setEndMsg("You lose!");
+			  
+			  
+			}
+			/* EventQueue.invokeLater(new Runnable() { public void run() {
+			 * 
+			 * gw.showEndMsg(); }
+			 * 
+			 * });
+			 * 
+			 * }*/
+			 
 
 			break;
 
 		case "SPEED":
-			
 
 			part = Integer.parseInt(msgs[2]);
 			int speed = Integer.parseInt(msgs[1]);
@@ -249,23 +253,17 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 
 			if (part == 2) {
 				game.setSpeed2(speed);
-
+ 
 			}
 
-			//EventQueue.invokeLater(this);
+			// EventQueue.invokeLater(this);
 			/*
-										 * EventQueue.invokeLater(new Runnable()
-										 * { public void run() { gw.repaint(); }
-										 * });
-										 */
+			 * EventQueue.invokeLater(new Runnable() { public void run() {
+			 * gw.repaint(); } });
+			 */
 
 			break;
-			
-			
-			
-		
-			
-			
+
 		default:
 			;
 
@@ -278,13 +276,9 @@ public class gameClientHandler extends SimpleChannelHandler{ //SimpleChannelInbo
 		e.getCause().printStackTrace();
 		e.getChannel().close();
 	}
-	
-  
-	
-
 
 	public void run() {
 
-		//gw.repaint();
+		// gw.repaint();
 	}
 }

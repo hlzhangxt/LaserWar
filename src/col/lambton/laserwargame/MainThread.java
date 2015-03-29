@@ -8,6 +8,7 @@ package col.lambton.laserwargame;
  import io.netty.channel.socket.nio.NioSocketChannel; */
 
 
+
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
@@ -25,18 +26,16 @@ import android.view.SurfaceHolder;
 
 public class MainThread extends Thread {
 
-	private SurfaceHolder surfaceHolder; // for manipulating canvas
+	// private SurfaceHolder surfaceHolder; // for manipulating canvas
 	private boolean threadIsRunning = true; // running by default
 	LaserwarView view;
+
 	// private Channel channel;
 	// private ChannelFuture lastWriteFuture;
 
-	static final String HOST = "IDEVUSR011.FRANKENI.COM";
-	static final int PORT = 8998;
-
 	// initializes the surface holder
-	public MainThread(SurfaceHolder holder, LaserwarView v) {
-		surfaceHolder = holder;
+	public MainThread(LaserwarView v) {
+		// surfaceHolder = holder;
 
 		view = v;
 		setName("MainThread");
@@ -50,52 +49,63 @@ public class MainThread extends Thread {
 	// controls the game loop
 	@Override
 	public void run() {
-		
-		ChannelFactory factory = new NioClientSocketChannelFactory(
-				Executors.newCachedThreadPool(),
-				Executors.newCachedThreadPool());
 
-		ClientBootstrap bootstrap = new ClientBootstrap(factory);
+		while (threadIsRunning) {
 
-		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-			public ChannelPipeline getPipeline() {
+			view.drawGameElements();
+			
+			int fireCount = gameClientHandler.game.getCountFires();
+			boolean isRepaint = false;
+
+			for (int i = 0; i < fireCount; i++) {
+				fireInfo fi = gameClientHandler.game.getNthFire(i);
+
+				if (fi.time > 0) {
+
+					fi.time--;
+				}
+
+			}
+
+			if (fireCount > 0) {
 				
-				return Channels.pipeline(
-												
-						new gameClientHandler(surfaceHolder));
+				gameClientHandler.game.removeAllZeros();
+
 			}
-		});
-
-		bootstrap.setOption("tcpNoDelay", true);
-		bootstrap.setOption("keepAlive", true);
-
-		bootstrap.connect(new InetSocketAddress(HOST, PORT));
-		
-		/*
-		EventLoopGroup workerGroup = new NioEventLoopGroup();
-
-		Bootstrap b = new Bootstrap(); // (1)
-		b.group(workerGroup); // (2)
-		b.channel(NioSocketChannel.class); // (3)
-		b.option(ChannelOption.SO_KEEPALIVE, true); // (4)
-		b.handler(new ChannelInitializer<SocketChannel>() {
-			@Override
-			public void initChannel(SocketChannel ch) throws Exception {
-				ch.pipeline().addLast(new gameClientInitializer(surfaceHolder));
+			
+			
+			
+			
+			
+			
+			try {
+				sleep(20); 
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});
 
-		try {
-			// Start the client.
-			ChannelFuture f = b.connect(HOST, PORT).sync(); // (5)
-
-			// Wait until the connection is closed.
-			f.channel().closeFuture().sync();
-		} catch (Exception e) {
-			Log.e("Exceptions", e.getMessage());
-			return;
 		}
-        */
+
+		/*
+		 * EventLoopGroup workerGroup = new NioEventLoopGroup();
+		 * 
+		 * Bootstrap b = new Bootstrap(); // (1) b.group(workerGroup); // (2)
+		 * b.channel(NioSocketChannel.class); // (3)
+		 * b.option(ChannelOption.SO_KEEPALIVE, true); // (4) b.handler(new
+		 * ChannelInitializer<SocketChannel>() {
+		 * 
+		 * @Override public void initChannel(SocketChannel ch) throws Exception
+		 * { ch.pipeline().addLast(new gameClientInitializer(surfaceHolder)); }
+		 * });
+		 * 
+		 * try { // Start the client. ChannelFuture f = b.connect(HOST,
+		 * PORT).sync(); // (5)
+		 * 
+		 * // Wait until the connection is closed.
+		 * f.channel().closeFuture().sync(); } catch (Exception e) {
+		 * Log.e("Exceptions", e.getMessage()); return; }
+		 */
 		/*
 		 * EventLoopGroup group; Bootstrap b; group = new NioEventLoopGroup(); b
 		 * = new Bootstrap();
@@ -112,30 +122,22 @@ public class MainThread extends Thread {
 		 * } catch (Exception e) { Log.e("Exceptions", e.getMessage()); return;
 		 * }
 		 */
-
-		Canvas canvas = null;
-
-		while (threadIsRunning) {
-			try {
-				// get Canvas for exclusive drawing from this thread
-				canvas = surfaceHolder.lockCanvas(null);
-
-				// lock the surfaceHolder for drawing
-				synchronized (surfaceHolder) {
-					// long currentTime = System.currentTimeMillis();
-					// double elapsedTimeMS = currentTime - previousFrameTime;
-					// totalElapsedTime += elapsedTimeMS / 1000.0;
-					// updatePositions(elapsedTimeMS); // update game state
-					view.drawGameElements(canvas); // draw using the canvas
-					// previousFrameTime = currentTime; // update previous time
-				}
-			} finally {
-				// display canvas's contents on the CannonView
-				// and enable other threads to use the Canvas
-				if (canvas != null)
-					surfaceHolder.unlockCanvasAndPost(canvas);
-			}
-		} // end while
+		/*
+		 * Canvas canvas = null;
+		 * 
+		 * while (threadIsRunning) { try { // get Canvas for exclusive drawing
+		 * from this thread canvas = surfaceHolder.lockCanvas(null);
+		 * 
+		 * // lock the surfaceHolder for drawing synchronized (surfaceHolder) {
+		 * // long currentTime = System.currentTimeMillis(); // double
+		 * elapsedTimeMS = currentTime - previousFrameTime; // totalElapsedTime
+		 * += elapsedTimeMS / 1000.0; // updatePositions(elapsedTimeMS); //
+		 * update game state view.drawGameElements(canvas); // draw using the
+		 * canvas // previousFrameTime = currentTime; // update previous time }
+		 * } finally { // display canvas's contents on the CannonView // and
+		 * enable other threads to use the Canvas if (canvas != null)
+		 * surfaceHolder.unlockCanvasAndPost(canvas); } } // end while
+		 */
 	} // end method run
 
 }
