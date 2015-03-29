@@ -7,5 +7,6 @@
     <string name="newgame">New Game</string>
     <string name="existgame">Join Existing Game</string>
     <string name="gametitle">Larser-War Game</string>
+    <string name="strExit">OK</string>
 
 </resources>

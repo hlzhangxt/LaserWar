@@ -7,8 +7,6 @@ package col.lambton.laserwargame;
  import io.netty.channel.nio.NioEventLoopGroup;
  import io.netty.channel.socket.nio.NioSocketChannel; */
 
-
-
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
@@ -53,7 +51,7 @@ public class MainThread extends Thread {
 		while (threadIsRunning) {
 
 			view.drawGameElements();
-			
+
 			int fireCount = gameClientHandler.game.getCountFires();
 			boolean isRepaint = false;
 
@@ -68,18 +66,63 @@ public class MainThread extends Thread {
 			}
 
 			if (fireCount > 0) {
-				
+
 				gameClientHandler.game.removeAllZeros();
 
 			}
-			
-			
-			
-			
-			
-			
+
+			String cmd = "";
+
+			if (leftKey.isPressed()) {
+				int times = leftKey.getTimes();
+				if (times > 0) {
+					cmd += "MOVE:" + gameClientHandler.game.getGameid() + ":"
+							+ "37" + "\r\n";
+					leftKey.setTimes(--times);
+				} else
+					leftKey.setPressed(false);
+
+			}
+
+			if (upKey.isPressed()) {
+
+				cmd += "MOVE:" + gameClientHandler.game.getGameid() + ":"
+						+ "38" + "\r\n";
+
+				upKey.setPressed(false);
+
+			}
+
+			if (rightKey.isPressed()) {
+				int times = rightKey.getTimes();
+				if (times > 0) {
+					cmd += "MOVE:" + gameClientHandler.game.getGameid() + ":"
+							+ "39" + "\r\n";
+					rightKey.setTimes(--times);
+				} else
+					rightKey.setPressed(false);
+
+			}
+
+			if (downKey.isPressed()) {
+
+				cmd += "MOVE:" + gameClientHandler.game.getGameid() + ":"
+						+ "40" + "\r\n";
+				downKey.setPressed(false);
+			}
+			if (spaceKey.isPressed()) {
+				if (leftKey.getTimes() == 0 && rightKey.getTimes() == 0) {
+					cmd += "MOVE:" + gameClientHandler.game.getGameid() + ":"
+							+ "32" + "\r\n";
+					spaceKey.setPressed(false);
+				}
+			}
+
+			if (!cmd.equals(""))
+				NettyThread.channel.write(cmd);
+
 			try {
-				sleep(20); 
+				sleep(20);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

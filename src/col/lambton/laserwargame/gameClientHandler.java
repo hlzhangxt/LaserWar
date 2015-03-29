@@ -8,6 +8,9 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
+import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.view.SurfaceHolder;
 
 public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelInboundHandler<String>
@@ -47,7 +50,7 @@ public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelIn
 				String[] xys = msgs[3].split(",");
 				game.setC1(new Constraint(xys[0], xys[1], xys[2], xys[3]));
 				game.setC2(new Constraint(xys[4], xys[5], xys[6], xys[7]));
-				
+
 				view.initialGameForSec();
 				/*
 				 * EventQueue.invokeLater(new Runnable() { public void run() {
@@ -60,10 +63,9 @@ public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelIn
 
 				// EventQueue.invokeLater(this);
 				// gw.repaint();
-				
 
 			}
-			//view.drawGameElements();
+			// view.drawGameElements();
 			break;
 
 		case "NEW":
@@ -79,17 +81,15 @@ public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelIn
 			String[] xys = msgs[3].split(",");
 			game.setC1(new Constraint(xys[0], xys[1], xys[2], xys[3]));
 			game.setC2(new Constraint(xys[4], xys[5], xys[6], xys[7]));
-			
-			
+
 			view.initialGame();
-		//	view.drawGameElements();
+			// view.drawGameElements();
 
 			/*
 			 * EventQueue.invokeLater(new Runnable() {
 			 * 
 			 * public void run() { //gw.initialGame(); } });
 			 */
-			
 
 			break;
 
@@ -116,7 +116,7 @@ public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelIn
 			 * EventQueue.invokeLater(new Runnable() { public void run() {
 			 * gw.repaint(); } });
 			 */
-		//	view.drawGameElements();
+			// view.drawGameElements();
 			break;
 
 		case "ANGLE":
@@ -147,7 +147,7 @@ public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelIn
 				 */
 
 			}
-			//view.drawGameElements();
+			// view.drawGameElements();
 
 			break;
 
@@ -165,7 +165,7 @@ public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelIn
 
 			}
 			AGameSession.setGotGames(true);
-		//	view.drawGameElements();
+			// view.drawGameElements();
 			break;
 
 		case "FIRE":
@@ -189,10 +189,13 @@ public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelIn
 			 * 
 			 * EventQueue.invokeLater(this);
 			 */
-		//	view.drawGameElements();
-			
-			view.soundPool.play(view.soundMap.get(view.LASERSHOT), 1, 1, 1, 0, 1f);
-			if (fi.targeted) view.soundPool.play(view.soundMap.get(view.GOTEXPLOSION), 1, 1, 1, 0, 1f);
+			// view.drawGameElements();
+
+			view.soundPool.play(view.soundMap.get(view.LASERSHOT), 1, 1, 1, 0,
+					1f);
+			if (fi.targeted)
+				view.soundPool.play(view.soundMap.get(view.GOTEXPLOSION), 1, 1,
+						1, 0, 1f);
 			break;
 
 		case "SCORE":
@@ -209,35 +212,48 @@ public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelIn
 				game.setFule2(score);
 
 			}
-		//	view.drawGameElements();
-			
-			 
-			 
+			// view.drawGameElements();
+
 			if (score <= 0) {
+
+				view.soundPool.play(view.soundMap.get(view.EXPLODEDLOUD), 1, 1,
+						1, 0, 1f);
+
+				if (part == 1) {
+					game.setImgTank(game.imgExp);
+
+				}
+
+				if (part == 2) {
+					game.setImgTank2(game.imgExp);
+
+				}
+
+				if (game.ID == part)
+					game.setEndMsg("You lose!");
 				
-				view.soundPool.play(view.soundMap.get(view.EXPLODEDLOUD), 1, 1, 1, 0, 1f);	
-			 
-			 
-			if (part == 1) { game.setImgTank(game.imgExp);
-			
+				
+				
+				
+				
+
+			/*	FragmentManager manager = view.getActivity()
+						.getFragmentManager();
+				gameOverActivity gameOverActivity = new gameOverActivity();
+
+				gameOverActivity.show(manager, "DialogActivity"); */
+
 			}
-			 
-			 if (part == 2) { game.setImgTank2(game.imgExp);
-			  
-			}
-			 
-			  if (game.ID == part) game.setEndMsg("You lose!");
-			  
-			  
-			}
-			/* EventQueue.invokeLater(new Runnable() { public void run() {
+
+			/*
+			 * EventQueue.invokeLater(new Runnable() { public void run() {
 			 * 
 			 * gw.showEndMsg(); }
 			 * 
 			 * });
 			 * 
-			 * }*/
-			 
+			 * }
+			 */
 
 			break;
 
@@ -253,7 +269,7 @@ public class gameClientHandler extends SimpleChannelHandler { // SimpleChannelIn
 
 			if (part == 2) {
 				game.setSpeed2(speed);
- 
+
 			}
 
 			// EventQueue.invokeLater(this);

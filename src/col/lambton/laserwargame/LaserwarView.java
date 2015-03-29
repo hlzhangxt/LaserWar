@@ -2,6 +2,7 @@ package col.lambton.laserwargame;
 
 
 import java.net.InetSocketAddress;
+import java.util.Collections;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -13,8 +14,11 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,9 +33,13 @@ import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -40,10 +48,14 @@ import android.view.View.OnClickListener;
 public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private Activity activity;
+	
+	private GestureDetector mDetector;
 
 	// private LaserwarView view;
 
 	private static final String TAG = "LaserWarView";
+	
+	private static boolean started = false;
 
 	SurfaceHolder holder; // = getHolder();
 
@@ -65,6 +77,15 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 	public static final int EXPLODEDLOUD = 0;
 	public static final int GOTEXPLOSION = 1;
 	public static final int LASERSHOT = 2;
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	// private Channel channel = null;
 	// private ChannelFuture lastWriteFuture = null;
@@ -102,6 +123,8 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 	 * resizeBmp; }
 	 */
 
+	
+
 	public LaserwarView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -113,7 +136,11 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 		activity = (Activity) context;
 		holder = getHolder();
 		holder.addCallback(this);
-
+		
+		
+		mDetector = new GestureDetector(context, new MyGestureListener());
+		
+        
 		// sound files
 		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 
@@ -143,6 +170,8 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 		
 		BmShot = BitmapFactory.decodeResource(activity.getResources(),
 				R.raw.shot);
+		
+		
 
 		// view = this;
 
@@ -310,7 +339,12 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 	 */
 	public void stopGame() {
 		if (mainThread != null)
+		{
 			mainThread.setRunning(false); // tell thread to terminate
+			
+			
+			
+		}
 	}
 
 	public void releaseResources() {
@@ -319,10 +353,48 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 	}
 
 	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		/* int action = event.getAction();
+		
+		 float x = event.getX();
+		 float y = event.getY();
+
+		 
+		 switch(action) {
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 }
+		
+		*/
+		
+     return		this.mDetector.onTouchEvent(event);
+		
+		
+			 
+		
+		
+		
+		
+		
+		
+	//	return super.onTouchEvent(event);
+	}
+
+	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
 		// setWillNotDrawEnabled(false);
 
+	//	if (gameClientHandler.game != null && !gameClientHandler.game.getGameid().equals("-1")) return;
+	//	if (started) return;
+		
+		
 		
 		
 		AGameSession.activity = activity;
@@ -346,7 +418,7 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 		mainThread.start(); // start the game loop thread
 		
 		
-		
+	//	started = true;
 		
 		/*
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
@@ -357,6 +429,14 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 			 | View.SYSTEM_UI_FLAG_IMMERSIVE);*/
 		
 	//	this.drawGameElements();
+	}
+
+	public Activity getActivity() {
+		return activity;
+	}
+
+	public void setActivity(Activity activity) {
+		this.activity = activity;
 	}
 
 	@Override
@@ -381,6 +461,7 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 				Log.e(TAG, "Thread interrupted", e);
 			}
 		}
+		//activity.finish();
 
 	}
 
@@ -545,7 +626,8 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 				
 				
 				
-				
+			if (gameClientHandler.game.getFule1() == 0 || gameClientHandler.game.getFule2() == 0)	
+				showGameOverDialog();
 				
 				
 				
@@ -663,5 +745,64 @@ public class LaserwarView extends SurfaceView implements SurfaceHolder.Callback 
 		 */
 
 	}
+	
+	
+	private void showGameOverDialog()
+	   {
+		
+		   stopGame();
+   	       releaseResources();
+	      // DialogFragment to display quiz stats and start new quiz
+	      final DialogFragment gameResult = 
+	         new DialogFragment()
+	         {
+	            // create an AlertDialog and return it
+	            @Override
+	            public Dialog onCreateDialog(Bundle bundle)
+	            {
+	              
+	            	
+	              // create dialog displaying String resource for messageId
+	               AlertDialog.Builder builder = 
+	                  new AlertDialog.Builder(getActivity());
+	               builder.setTitle("Larser-War Game");
+
+	               // display number of shots fired and total time elapsed
+	               builder.setMessage(gameClientHandler.game.getEndMsg());
+	               
+	               
+	               
+	               
+	               
+	               builder.setPositiveButton(R.string.strExit,
+	                  new DialogInterface.OnClickListener()
+	                  {
+	                     // called when "Reset Game" Button is pressed
+	                     @Override
+	                     public void onClick(DialogInterface dialog, int which)
+	                     {
+	                    	 
+	                    	 activity.finish();
+	                    	 
+	                     }
+	                  } // end anonymous inner class
+	               ); // end call to setPositiveButton
+	               
+	               return builder.create(); // return the AlertDialog
+	            } // end method onCreateDialog   
+	         }; // end DialogFragment anonymous inner class
+	      
+	      // in GUI thread, use FragmentManager to display the DialogFragment
+	      activity.runOnUiThread(
+	         new Runnable() {
+	            public void run()
+	            {
+	              
+	               gameResult.setCancelable(false); // modal dialog
+	               gameResult.show(activity.getFragmentManager(), "results");
+	            } 
+	         } // end Runnable
+	      ); // end call to runOnUiThread
+	   } // end method showGameOverDialog
 
 }
